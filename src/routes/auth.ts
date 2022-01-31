@@ -1,5 +1,7 @@
 import express from "express";
 import {body,validationResult} from "express-validator"
+import User from "../models/user"
+import bcrypt from "bcryptjs"
 
 const router = express.Router()
 
@@ -10,10 +12,21 @@ router.post("/signup", body("email").isEmail().withMessage("The email is invalid
         const errors = validationsErrors.array().map(error => ({
             msg: error.msg
         }));
-        res.json({errors})
+        return res.json({errors,data:null})
     }
-    const {email , password} = req.body;
-    res.json({email,password})
+    const {email,password} = req.body;
+    const user = await User.findOne({email})
+
+    if(user){
+        return res.json({
+            errors: [
+                {
+                    msg: "Email already in use"
+                }
+            ],
+            data: null
+        })
+    }
 
 })
 
