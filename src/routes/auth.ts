@@ -2,6 +2,7 @@ import express from "express";
 import {body,validationResult} from "express-validator"
 import User from "../models/user"
 import bcrypt from "bcryptjs"
+import JWT from "jsonwebtoken"
 
 const router = express.Router()
 
@@ -27,6 +28,29 @@ router.post("/signup", body("email").isEmail().withMessage("The email is invalid
             data: null
         })
     }
+
+    const hashedPassword = await bcrypt.hash(password,10)
+    const newUser = await User.create({
+        email, password: hashedPassword
+    })
+
+    const token = await JWT.sign(
+        {email: newUser.email},
+        process.env.JWT_SECRET as string,
+        {
+            expiresIn: 343434343434
+        }
+    )
+    res.json({
+        errors: [],
+        data: {
+            token,
+            user: {
+                id: newUser._id,
+                email: newUser.email
+            }
+        }
+    })
 
 })
 
