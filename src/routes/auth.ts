@@ -54,4 +54,55 @@ router.post("/signup", body("email").isEmail().withMessage("The email is invalid
 
 })
 
+
+router.post("/login", async (req,res) => {
+    const {email,password} = req.body;
+    const user = await User.findOne({email})
+
+    //if user does not exist in db
+    if(!user){
+        return res.json({
+            errors: [
+                {
+                    msg: "Invalid credentials"
+                }
+            ],
+            data: null
+        })
+    }
+
+    const isMatch = await bcrypt.compare(password,user.password)
+
+    //passwords does not match
+    if(!isMatch){
+        return res.json({
+            errors: [
+                {
+                    msg: "Invalid credentials"
+                }
+            ],
+            data: null
+        })
+    }
+
+    const token = await JWT.sign(
+        {email: user.email},
+        process.env.JWT_SECRET as string,
+        {
+            expiresIn: 343434343434
+        }
+    )
+    res.json({
+        errors: [],
+        data: {
+            token,
+            user: {
+                id: user._id,
+                email: user.email
+            }
+        }
+    })
+
+})
+
 export default router
