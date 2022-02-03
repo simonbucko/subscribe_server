@@ -1,6 +1,7 @@
 import express from "express"
 import authRoutes from "./routes/auth"
 import subsRoutes from "./routes/subs"
+import articlesRoutes from "./routes/articles"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import cors from "cors"
@@ -16,6 +17,7 @@ mongoose.connect(process.env.MONGO_URI as string)
         app.use(cors())
         app.use("/auth", authRoutes)
         app.use("/subs", subsRoutes)
+        app.use("/articles", articlesRoutes)
         app.listen(8080,()=>{
             console.log("Server is runnig on port 8080")
         })
