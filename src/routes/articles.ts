@@ -12,7 +12,7 @@ router.get("/",checkAuth, async(req,res) => {
     const user = await User.findOne({email: req.user})
 
     const subscriptions = await stripe.subscriptions.list({
-        customer: user.stripeCustomerId,
+        customer: user.customerStripeId,
         status: "all",
         expand: ["data.default_payment_method"]
     }, {
