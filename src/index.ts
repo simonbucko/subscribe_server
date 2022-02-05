@@ -15,6 +15,7 @@ mongoose.connect(process.env.MONGO_URI as string)
         //allows utilize JSON body in request
         app.use(express.json())
         app.use(cors())
+        app.get("/test",(req,res) => res.send("Hello from subscription app API") )
         app.use("/auth", authRoutes)
         app.use("/subs", subsRoutes)
         app.use("/articles", articlesRoutes)
