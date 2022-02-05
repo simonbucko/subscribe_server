@@ -23,8 +23,8 @@ router.post(`/session`, checkAuth,async (req,res) => {
             price:req.body.priceId,
             quantity: 1
         }],
-        success_url: "http://localhost:3000/articles",
-        cancel_url: "http://localhost:3000/article-plans", 
+        success_url: `https://subsb.netlify.app/articles`,
+        cancel_url: `https://subsb.netlify.app/article-plans`, 
         customer: user.customerStripeId
     },{
         apiKey: process.env.STRIPE_SECRET_KEY
