@@ -19,7 +19,8 @@ mongoose.connect(process.env.MONGO_URI as string)
         app.use("/auth", authRoutes)
         app.use("/subs", subsRoutes)
         app.use("/articles", articlesRoutes)
-        app.listen(8080,()=>{
+        const PORT = process.env.PORT || 8080
+        app.listen(PORT,()=>{
             console.log("Server is runnig on port 8080")
         })
     })
